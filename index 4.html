@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>神秘算命馆</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #dff9fb, #f9ca24);
+      text-align: center;
+      padding: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 18px;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>欢迎来到神秘算命馆</h1>
+  <p>请输入你的姓名和生日，看看未来的运势吧！</p>
+
+  <input type="text" id="name" placeholder="姓名"><br>
+  <input type="date" id="birthday"><br>
+  <button id="startBtn" onclick="tellFortune()">开始算命</button>
+
+  <div class="result" id="result" style="display:none;"></div>
+
+  <script>
+    const fortunePrefixes = ["你将", "未来可能", "接下来", "近期你会", "在不久的将来", "你会突然发现", "冥冥之中注定"];
+    const fortuneMiddles = ["遇见贵人", "财运上升", "感情变动", "事业突破", "健康改善", "陷入迷茫", "得贵人扶助"];
+    const fortuneEnds = ["记得把握时机。", "保持冷静方可成功。", "多留意身边的人事物。", "一切顺其自然最为吉利。", "切勿操之过急。", "这是命运的安排。", "别忘了初衷。"];
+
+    const cautionPrefixes = ["注意", "当心", "小心", "避免", "别忽视", "警惕", "近期不宜"];
+    const cautionMiddles = ["饮食问题", "朋友背叛", "感情波动", "金钱损失", "情绪失控", "错误判断", "过度劳累"];
+    const cautionEnds = ["以防万一。", "否则后果严重。", "影响你整体运势。", "会引起连锁反应。", "可能伤害他人也伤到自己。", "宜多静思少行动。", "适合反省内省。"];
+
+    // 生成100条不重复的内容
+    const generateRandomSentences = (prefixes, middles, ends, count) => {
+      const results = new Set();
+      while (results.size < count) {
+        const sentence = prefixes[Math.floor(Math.random() * prefixes.length)] + " " +
+                         middles[Math.floor(Math.random() * middles.length)] + "，" +
+                         ends[Math.floor(Math.random() * ends.length)];
+        results.add(sentence);
+      }
+      return Array.from(results);
+    };
+
+    const fortunes = generateRandomSentences(fortunePrefixes, fortuneMiddles, fortuneEnds, 100);
+    const cautions = generateRandomSentences(cautionPrefixes, cautionMiddles, cautionEnds, 100);
+
+    function getRandomItem(arr) {
+      const index = Math.floor(Math.random() * arr.length);
+      return arr.splice(index, 1)[0];
+    }
+
+    function tellFortune() {
+      const name = document.getElementById('name').value.trim();
+      const birthday = document.getElementById('birthday').value;
+      const button = document.getElementById('startBtn');
+
+      if (!name || !birthday) {
+        alert("请输入完整信息！");
+        return;
+      }
+
+      const fortune = getRandomItem(fortunes);
+      const caution = getRandomItem(cautions);
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `
+        <h2>${name} 的命运签</h2>
+        <p><strong>生日：</strong>${birthday}</p>
+        <p><strong>未来运势：</strong>${fortune}</p>
+        <p><strong>需要注意：</strong>${caution}</p>
+      `;
+      resultDiv.style.display = 'block';
+      button.disabled = true;
+    }
+  </script>
+</body>
+</html>
